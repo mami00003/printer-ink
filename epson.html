@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>エプソンのプリンターインク — A1 / A2 が付いた仕様変更品に注意</title>
+<meta name="description" content="カメ・クマノミ・さつまいも・マグカップなど愛称シリーズの純正インク78件。46・50・61・62・65・79・88番には仕様変更品があり、2006年発売の5機種は本体の更新が必要です。更新しても使えない型番が2つあります。">
+<link rel="canonical" href="https://mami00003.github.io/printer-ink/epson.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="エプソンのプリンターインク — A1 / A2 が付いた仕様変更品に注意">
+<meta property="og:description" content="カメ・クマノミ・さつまいも・マグカップなど愛称シリーズの純正インク78件。46・50・61・62・65・79・88番には仕様変更品があり、2006年発売の5機種は本体の更新が必要です。更新しても使えない型番が2つあります。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@500;700&display=swap">
+<style>
+
+:root{
+  --ground:#f4f6f8; --surface:#ffffff; --raise:#eceff3; --sunk:#e3e8ed;
+  --ink:#141a21; --ink2:#4a5866; --ink3:#7d8b99;
+  --line:#dbe2e9; --line2:#c3ced9;
+  --accent:#a8650a; --accent-soft:#fbf0dd;
+  --ok:#1a7a53; --ok-soft:#e0f2ea;
+  --warn:#a8650a; --warn-soft:#fbf0dd;
+  --bad:#ad3729; --bad-soft:#fbe6e2;
+  --mono:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Noto Sans JP","Hiragino Sans","Yu Gothic UI",Meiryo,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0e1216; --surface:#161c22; --raise:#1e262d; --sunk:#0a0e11;
+    --ink:#e7eef4; --ink2:#a0b0bd; --ink3:#6d7d8a;
+    --line:#26303a; --line2:#35424e;
+    --accent:#f0a63c; --accent-soft:#2a2013;
+    --ok:#4cc08a; --ok-soft:#10291f;
+    --warn:#f0a63c; --warn-soft:#2a2013;
+    --bad:#f07a68; --bad-soft:#2e1714;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0e1216; --surface:#161c22; --raise:#1e262d; --sunk:#0a0e11;
+  --ink:#e7eef4; --ink2:#a0b0bd; --ink3:#6d7d8a;
+  --line:#26303a; --line2:#35424e;
+  --accent:#f0a63c; --accent-soft:#2a2013;
+  --ok:#4cc08a; --ok-soft:#10291f;
+  --warn:#f0a63c; --warn-soft:#2a2013;
+  --bad:#f07a68; --bad-soft:#2e1714;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:820px; margin:0 auto; padding-inline:18px; padding-block:0 56px}
+h1,h2,h3{margin:0; text-wrap:balance}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+a{color:var(--accent)}
+
+.label{
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink3);
+}
+
+/* 広告表記 */
+.ad-note{background:var(--raise); border-bottom:1px solid var(--line); font-size:12.5px; color:var(--ink2)}
+.ad-note div{max-width:820px; margin:0 auto; padding:9px 18px}
+
+/* header */
+header{padding-block:38px 26px}
+h1{font-size:clamp(25px,5.2vw,34px); font-weight:700; letter-spacing:-.01em; line-height:1.35}
+header p{margin:12px 0 0; color:var(--ink2); max-width:56ch; font-size:14.5px}
+
+/* 入力 */
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:22px; display:grid; gap:22px; grid-template-columns:1fr 1fr;
+}
+.field{display:flex; flex-direction:column; gap:8px; min-width:0}
+.field.wide{grid-column:1 / -1}
+.seg{display:flex; flex-wrap:wrap; gap:6px}
+.seg button{
+  font:inherit; font-size:13.5px; font-weight:500; cursor:pointer;
+  padding:6px 13px; border-radius:6px; background:var(--raise);
+  color:var(--ink2); border:1px solid transparent; transition:.14s;
+}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--surface); border-color:var(--ink)}
+.spd{display:flex; align-items:baseline; gap:9px}
+.spd output{font-family:var(--mono); font-weight:700; font-size:21px; font-variant-numeric:tabular-nums}
+.spd span{font-size:12.5px; color:var(--ink3)}
+input[type=range]{width:100%; accent-color:var(--accent); margin:0}
+
+/* メーター（ヒーロー） */
+.meter{
+  margin-top:18px; background:var(--surface); border:1px solid var(--line);
+  border-radius:10px; overflow:hidden;
+}
+.meter-head{
+  padding:20px 22px 16px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  border-bottom:1px solid var(--line);
+}
+.big{
+  font-family:var(--mono); font-weight:700; font-size:clamp(34px,7vw,46px);
+  line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums; color:var(--accent);
+}
+.big small{font-size:.38em; letter-spacing:.04em; margin-left:5px; color:var(--ink2)}
+.verdict{
+  font-size:13px; font-weight:700; padding:4px 11px; border-radius:999px; white-space:nowrap;
+}
+.v-ok{background:var(--ok-soft); color:var(--ok)}
+.v-warn{background:var(--warn-soft); color:var(--warn)}
+.v-bad{background:var(--bad-soft); color:var(--bad)}
+.meter-body{padding:20px 22px 22px; display:flex; flex-direction:column; gap:14px}
+.bar{
+  position:relative; height:26px; border-radius:5px; background:var(--sunk);
+  border:1px solid var(--line); overflow:hidden;
+}
+.bar .fill{position:absolute; inset:0 auto 0 0; border-radius:4px 0 0 4px; transition:width .25s ease, background .25s}
+.bar .safe{
+  position:absolute; top:-1px; bottom:-1px; width:2px; background:var(--ink2);
+}
+.scale{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--ink3); font-variant-numeric:tabular-nums}
+.meter-body p{margin:0; font-size:14px; color:var(--ink2)}
+.meter-body p b{color:var(--ink)}
+
+/* 設定表 */
+section{margin-top:44px}
+h2{font-size:19px; font-weight:700; letter-spacing:-.005em}
+.lede{color:var(--ink2); margin:8px 0 0; font-size:14px; max-width:60ch}
+.tabs{display:flex; flex-direction:column; gap:20px; margin-top:20px}
+.tab{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.tab-h{
+  padding:11px 18px; background:var(--raise); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.tab-h .label{color:var(--ink2)}
+.rows{display:flex; flex-direction:column}
+.row{
+  display:grid; grid-template-columns:max-content minmax(0,1fr); gap:10px 18px;
+  align-items:baseline; padding:11px 18px; border-top:1px solid var(--line);
+}
+.rows .row:first-child{border-top:0}
+.row dt{font-size:14px; color:var(--ink2); margin:0}
+.row dd{
+  margin:0; font-family:var(--mono); font-weight:700; font-size:14.5px;
+  color:var(--ink); font-variant-numeric:tabular-nums; text-align:right; word-break:break-word;
+}
+.row .note{display:block; font-family:var(--sans); font-weight:400; font-size:12px; color:var(--ink3); margin-top:2px}
+
+/* 原因リスト */
+.causes{display:flex; flex-direction:column; gap:0; margin-top:16px}
+.cause{display:grid; grid-template-columns:minmax(0,148px) 1fr; gap:6px 20px; padding:15px 0; border-top:1px solid var(--line)}
+.cause dt{font-family:var(--mono); font-size:12.5px; font-weight:700; color:var(--accent); letter-spacing:.02em; padding-top:3px}
+.cause dd{margin:0; font-size:14px; color:var(--ink2)}
+.cause dd b{color:var(--ink)}
+
+/* 広告カード */
+.tools{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-top:20px}
+.tool{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:17px 18px; display:flex; flex-direction:column; gap:10px}
+.tool h3{font-size:16px; font-weight:700}
+.tool p{margin:0; font-size:13.5px; color:var(--ink2); flex:1}
+.tool a, .tool span.cta{
+  display:block; text-align:center; text-decoration:none; font-size:14px; font-weight:700;
+  padding:9px 14px; border-radius:7px; background:var(--ink); color:var(--surface);
+}
+.tool span.cta{background:var(--raise); color:var(--ink3); border:1px dashed var(--line2); font-weight:500}
+.todo{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; color:var(--warn); border:1px solid var(--warn); border-radius:4px; padding:1px 7px; align-self:flex-start}
+
+footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink3); line-height:1.75}
+footer a{color:var(--ink2)}
+
+@media (max-width:560px){
+  .panel{grid-template-columns:1fr; gap:18px; padding:18px}
+  .cause{grid-template-columns:1fr; gap:2px}
+  .row{grid-template-columns:1fr; gap:2px}
+  .row dd{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.count{margin-top:18px; font-family:var(--mono); font-size:12px; letter-spacing:.08em; color:var(--ink3)}
+.res{display:flex; flex-direction:column; gap:12px; margin-top:12px}
+.pack{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px; display:flex; flex-direction:column; gap:8px}
+.pack .no{font-family:var(--mono); font-weight:700; font-size:20px; letter-spacing:.01em; color:var(--accent)}
+.pack .nm{font-size:15px; font-weight:700; line-height:1.5}
+.pack p{margin:0; font-size:14px; color:var(--ink2)}
+.pack p b{color:var(--ink)}
+.buys{display:flex; flex-wrap:wrap; gap:8px}
+.pack a.buy{
+  display:inline-block; text-decoration:none;
+  font-size:13.5px; font-weight:700; padding:8px 14px; border-radius:7px;
+  background:var(--ink); color:var(--surface);
+}
+.pack a.buy.az{background:transparent; color:var(--ink); border:1px solid var(--ink)}
+.pack .adlabel{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; color:var(--ink3)}
+.pack .nofound{font-size:13px; color:var(--ink2); background:var(--raise); border:1px dashed var(--line2); border-radius:7px; padding:10px 12px; margin:0}
+.src{font-size:12px; color:var(--ink3)}
+.src a{color:var(--ink2)}
+.empty{background:var(--surface); border:1px dashed var(--line2); border-radius:10px; padding:20px; color:var(--ink2); font-size:14px}
+.warnbox{background:var(--bad-soft); border:1px solid var(--bad); border-radius:10px; padding:16px 18px; margin-top:18px}
+.warnbox p{margin:0; font-size:14px; color:var(--ink)}
+.warnbox .label{color:var(--bad)}
+input[type=text]{
+  font:inherit; font-size:15px; width:100%; padding:9px 12px; border-radius:7px;
+  border:1px solid var(--line2); background:var(--surface); color:var(--ink);
+}
+.quotes{display:flex; flex-direction:column; gap:14px; margin-top:18px}
+.quote{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--ink2); border-radius:0 10px 10px 0; padding:14px 18px}
+.quote .who{font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:6px}
+.quote blockquote{margin:0; font-size:14px; color:var(--ink2); line-height:1.8}
+.old{width:100%; border-collapse:collapse; margin-top:16px; font-size:14px}
+.old th,.old td{border-bottom:1px solid var(--line); padding:9px 10px; text-align:left; vertical-align:top}
+.old th{font-size:12px; letter-spacing:.06em; color:var(--ink3); font-weight:500; white-space:nowrap}
+.old td:first-child{font-family:var(--mono); color:var(--ink2); word-break:break-word}
+.old td:last-child{font-family:var(--mono); font-weight:700; color:var(--accent); white-space:nowrap}
+.wrap{overflow-x:auto}
+.old th[scope=row]{font-family:var(--mono); font-weight:700; color:var(--accent); white-space:nowrap; font-size:13px; letter-spacing:0}
+.old.list td:first-child,.old.list td:last-child{font-family:inherit; color:inherit; font-weight:400; white-space:normal}
+.old .buycell{white-space:nowrap}
+.old .buycell a{color:var(--ink); font-weight:700}
+.old .na{color:var(--ink3)}
+.old small{color:var(--ink3); font-size:12px}
+.makerblocks{display:flex; flex-direction:column; gap:16px; margin-top:16px}
+.makerblock{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px}
+.makerblock h3{font-size:15px; font-weight:700; margin:0 0 6px}
+.makerblock p.how{margin:0 0 8px; font-size:14px; color:var(--ink2)}
+.makerblock ul{margin:0; padding-left:18px; font-size:14px; color:var(--ink2); line-height:1.9}
+.makerblock code{font-family:var(--mono); font-weight:700; color:var(--accent)}
+.makerblock small{color:var(--ink3); font-size:12.5px}
+.stamp{font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--ink3)}
+
+:root{--accent:#7a2f6e; --accent-soft:#f5e7f2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--accent:#dd8ccd; --accent-soft:#271026}}
+:root[data-theme="dark"]{--accent:#dd8ccd; --accent-soft:#271026}
+.srch{margin-top:16px}
+.srch label{display:block; font-size:13px; color:var(--ink2); margin-bottom:6px}
+.hit{font-family:var(--mono); font-size:12px; color:var(--ink3); margin-top:8px; letter-spacing:.06em}
+.old tr[hidden]{display:none}
+mark{background:var(--accent-soft); color:var(--ink); border-radius:2px; padding:0 1px}
+.cmp{width:100%; border-collapse:collapse; margin-top:16px; font-size:13.5px}
+.cmp th,.cmp td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top}
+.cmp thead th{background:var(--raise); font-size:12px; color:var(--ink2); font-weight:700; white-space:nowrap}
+.cmp td b{color:var(--ink)}
+.oem{display:flex; flex-direction:column; gap:12px; margin-top:16px}
+.oemcard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:15px 18px}
+.oemcard h3{font-size:14.5px; font-weight:700; margin:0 0 6px; font-family:var(--mono); color:var(--accent)}
+.oemcard p{margin:0; font-size:14px; color:var(--ink2)}
+.oemcard p + p{margin-top:7px}
+.flow{font-family:var(--mono); font-size:13px; color:var(--ink); background:var(--raise); border-radius:6px; padding:8px 11px; margin-top:8px; overflow-x:auto; white-space:nowrap}
+.pill{display:inline-block; font-family:var(--mono); font-size:11px; letter-spacing:.06em; padding:2px 8px; border-radius:999px; background:var(--raise); color:var(--ink2); border:1px solid var(--line)}
+.toc{margin-top:22px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 18px}
+.toc ol{margin:0; padding-left:20px; font-size:14px; line-height:1.95; color:var(--ink2)}
+.toc a{color:var(--ink2)}
+.wrap.bleed{margin-inline:0}
+@media (min-width:1120px){.wrap.bleed{margin-inline:-130px}}
+.old td.nw, .old th.nw{white-space:nowrap}
+.keyfacts{margin-top:20px; display:flex; flex-direction:column; gap:0}
+.keyfacts > div{display:grid; grid-template-columns:26px minmax(0,1fr); gap:10px; padding:12px 0; border-top:1px solid var(--line); font-size:14.5px; color:var(--ink2); align-items:start}
+.keyfacts > div:first-child{border-top:0}
+.keyfacts > div > span{font-family:var(--mono); font-weight:700; color:var(--accent); line-height:1.8}
+.keyfacts > div > p{margin:0; min-width:0}
+.keyfacts b{color:var(--ink)}
+
+.toc{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+.toc ul{margin:0;padding-left:20px;line-height:1.95;font-size:14px;color:var(--ink2)}
+.toc a{color:var(--ink2)}
+.crumb{font-size:13px;color:var(--ink3);margin:0 0 6px}
+.crumb a{color:var(--ink2)}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:16px}
+.block ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink2);line-height:1.95}
+.block code{font-family:var(--mono);font-weight:700;color:var(--accent)}
+.block small{color:var(--ink3);font-size:12.5px}
+.block p{margin:0 0 8px;font-size:14.5px;color:var(--ink2)}
+.block p:last-child{margin-bottom:0}
+.block b{color:var(--ink)}
+
+</style>
+</head>
+<body>
+<div class="ad-note"><div>このページには広告（アフィリエイトリンク）が含まれます。型番・適合・価格・注意文はすべてメーカー公式の記載から取っています。</div></div>
+<div class="page">
+<header>
+  <p class="crumb"><a href="/printer-ink/">プリンターインク型番逆引き</a> ／ エプソン</p>
+  <h1>エプソンのプリンターインク — A1 / A2 が付いた仕様変更品に注意</h1>
+  <p>カメ・クマノミ・さつまいも・マグカップなど愛称シリーズの純正インク78件。46・50・61・62・65・79・88番には仕様変更品があり、2006年発売の5機種は本体の更新が必要です。更新しても使えない型番が2つあります。</p>
+</header>
+
+<section><h2>A1 / A2 が付いた仕様変更品</h2>
+<div class="oem"><div class="oemcard"><h3>エプソン ― A1 / A2 が付いた仕様変更品</h3><p>エプソンは一部のインクを仕様変更し、型番の末尾に <b>A1</b> または <b>A2</b> を付けました。46番・50番・61番・62番・65番・79番・88番が対象です。</p><p>2006年発売の <b>PM-A820 / PM-A920 / PM-G850 / PM-D870 / PM-G4500</b> は、本体のファームウェア更新をしないと変更品が使えません。</p>
+<blockquote style="margin:12px 0 0;padding-left:14px;border-left:3px solid var(--line2);font-size:14px;color:var(--ink2)">「また、2006年発売のプリンターは、本体のファームウェア更新が完了した後におきましても変更品カートリッジ（インク型番末尾A2）のライトシアンインク「ICLC50A2」、ライトマゼンタインク「ICLM50A2」はご使用いただけません。」</blockquote>
+<p style="margin-top:10px">つまり <b>ICLC50A2 と ICLM50A2 だけは、更新しても使えません</b>。更新の申し込みについてエプソンは「2025年3月31日（月）17:30までのお申し込みで終了となります。」と書いていて、この期限はすでに過ぎています。</p>
+<p class="src"><a href="https://www.epson.jp/products/colorio/supply/ink/osirase.htm" target="_blank" rel="noopener">エプソン インクの仕様変更</a>　<a href="https://www.epson.jp/osirase/2023/230914.htm" target="_blank" rel="noopener">79番の変更（2023/9/14）</a></p></div></div>
+</section>
+<section><h2>対象の番号と、変更後の型番</h2>
+<div class="wrap"><table class="old"><thead><tr><th scope="col">番号</th><th scope="col">従来 → 変更後</th></tr></thead><tbody>
+<tr><th scope="row">46番</th><td>ICBK46→ICBK46A1 ／ ICC46→ICC46A1 ／ ICM46→ICM46A1 ／ ICY46→ICY46A1 ／ IC4CL46→IC4CL46A1</td></tr>
+        <tr><th scope="row">50番</th><td>ICBK50→ICBK50A1 ／ ICC50→ICC50A1 ／ ICM50→ICM50A1 ／ ICY50→ICY50A1 ／ ICLC50→ICLC50A2 ／ ICLM50→ICLM50A2 ／ IC6CL50→IC6CL50A2</td></tr>
+        <tr><th scope="row">61番</th><td>ICBK61→ICBK61A1</td></tr>
+        <tr><th scope="row">62番</th><td>ICBK62→ICBK62A1 ／ ICC62→ICC62A1 ／ ICM62→ICM62A1 ／ ICY62→ICY62A1 ／ IC4CL62→IC4CL62A1</td></tr>
+        <tr><th scope="row">65番</th><td>ICC65→ICC65A1 ／ ICM65→ICM65A1 ／ ICY65→ICY65A1</td></tr>
+        <tr><th scope="row">79番</th><td>ICBK79→ICBK79A1 ／ ICMB79→ICMB79A1 ／ ICC79→ICC79A1 ／ ICVM79→ICVM79A1 ／ ICY79→ICY79A1 ／ ICLC79→ICLC79A1 ／ ICVLM79→ICVLM79A1 ／ ICGY79→ICGY79A1 ／ ICLGY79→ICLGY79A1 ／ IC9CL79→IC9CL79A1</td></tr>
+        <tr><th scope="row">88番</th><td>ICBK88→ICBK88A1 ／ ICC88→ICC88A1 ／ ICM88→ICM88A1 ／ ICY88→ICY88A1 ／ ICBL88→ICBL88A1 ／ ICR88→ICR88A1 ／ ICMB88→ICMB88A1 ／ ICOR88→ICOR88A1 ／ ICGL88→ICGL88A1 ／ IC9CL88→IC9CL88A1</td></tr>
+</tbody></table></div>
+<div class="warnbox" style="margin-top:18px"><p class="label">ファームウェア更新が必要な機種</p>
+<p style="margin-top:8px">PM-A820 ／ PM-A920 ／ PM-G850 ／ PM-D870 ／ PM-G4500（いずれも2006年発売）。<b>更新しても ICLC50A2 と ICLM50A2 は使えません。</b></p></div>
+<p class="src" style="margin-top:14px">79番（竹・SC-PX5V2 用）については、エプソンは「電子部品の調達」事情による変更と説明しています。印刷可能枚数は「約4.6%減少（インクの参考価格が変更となるため、1枚あたりの印刷コストは変わりません）」という書き方で、減るのは枚数、1枚あたりの費用は変わらない、としています。79番以外の番号についての数字ではありません。<a href="https://www.epson.jp/osirase/2023/230914.htm" target="_blank" rel="noopener">出典</a></p>
+</section>
+<section><h2>エコタンク機は黒とカラーで愛称が違う</h2>
+<div class="oem"><div class="oemcard"><h3>エプソン ― エコタンク機は黒とカラーで愛称が違う</h3><p><b>EW-M634T</b> と <b>EW-M5610FT</b> は、黒が <b>YAD-BK（ヤドカリ・127ml）</b>、カラーが <b>HAR-C / HAR-M / HAR-Y（ハリネズミ・70ml）</b>。1台の中で2つの愛称が混ざっています。</p><p class="src"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-m634t.htm" target="_blank" rel="noopener">EW-M634T</a>　<a href="https://www.epson.jp/support/portal/shoumouhin/ew-m5610ft.htm" target="_blank" rel="noopener">EW-M5610FT</a></p></div></div>
+</section>
+<section><h2>価格は公式に出ません</h2>
+<p class="lede">エプソンは公式がオープンプライスとしているため、メーカーのサイトに金額が載りません。このサイトも金額を書いていません。</p>
+<div class="block"><p><b>機種別インク型番FAQ（faq2.epson.jp の id=2426）は使っていません。</b>プログラムで読み取ると表の列がずれて、公式の個別ページと矛盾する答えを返すためです。たとえば EW-452A が IC1BK02 と出ますが、正しくは <b>MUG-BK/C/M/Y</b> です。このサイトは、機種ごとの消耗品ページとインクごとの個別ページだけを使っています。</p>
+<p class="src" style="margin-top:8px"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-452a.htm" target="_blank" rel="noopener">出典：EW-452A の消耗品ページ</a></p></div>
+</section>
+<section><h2>本体型番から引く（65機種）</h2><div class="wrap bleed"><table class="old"><thead><tr><th scope="col">本体の型番</th><th scope="col">使えるインク</th><th scope="col">出典</th></tr></thead><tbody>
+        <tr><th scope="row">EP-707A</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-708A</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-709A</th><td>ITH-BK/C/M/Y/LC/(LM), ITH-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-710A</th><td>ITH-BK/C/M/Y/LC/(LM), ITH-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-711A</th><td>ITH-BK/C/M/Y/LC/(LM), ITH-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-712A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-713A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-714A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-715A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-716A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-777A</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-807AB</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-807AR</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-807AW</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-808AB</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-808AR</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-808AW</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-810AB</th><td>ITH-BK/C/M/Y/LC/(LM), ITH-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-810AW</th><td>ITH-BK/C/M/Y/LC/(LM), ITH-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-811AB</th><td>ITH-BK/C/M/Y/LC/(LM), ITH-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-811AW</th><td>ITH-BK/C/M/Y/LC/(LM), ITH-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-812A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-813A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-814A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-815A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-816A</th><td>SAT-BK/C/M/Y/LC/LM, SAT-6CL</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-879AB</th><td>KUI-BK/C/M/Y/LC/LM, KUI-*-L, KUI-6CL, KUI-6CL-L, KUI-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kui-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-879AR</th><td>KUI-BK/C/M/Y/LC/LM, KUI-*-L, KUI-6CL, KUI-6CL-L, KUI-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kui-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-879AW</th><td>KUI-BK/C/M/Y/LC/LM, KUI-*-L, KUI-6CL, KUI-6CL-L, KUI-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kui-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-880AB</th><td>KUI-BK/C/M/Y/LC/LM, KUI-*-L, KUI-6CL, KUI-6CL-L, KUI-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kui-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-880AN</th><td>KUI-BK/C/M/Y/LC/LM, KUI-*-L, KUI-6CL, KUI-6CL-L, KUI-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kui-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-880AR</th><td>KUI-BK/C/M/Y/LC/LM, KUI-*-L, KUI-6CL, KUI-6CL-L, KUI-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kui-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-880AW</th><td>KUI-BK/C/M/Y/LC/LM, KUI-*-L, KUI-6CL, KUI-6CL-L, KUI-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kui-6cl.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-881AB</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-881AN</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-881AR</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-881AW</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-882AB</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-882AR</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-882AW</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-883AB</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-883AR</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-883AW</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-884AB</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-884AR</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-884AW</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-885AB</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-885AR</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-885AW</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-886AB</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-886AR</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-886AW</th><td>KAM-BK/C/M/Y/LC/LM, KAM-*-L, KAM-6CL, KAM-6CL-L, KAM-6CL-M</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-907F</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-977A3</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-978A3</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-979A3</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EP-982A3</th><td>ICBK80(L), ICC80L, ICM80L, ICY80L, ICLC80L, ICLM80L</td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EW-056A</th><td>MED-BK/C/M/Y, MED-4CL</td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-056a.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EW-452A</th><td>MUG-BK/C/M/Y, MUG-4CL</td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-452a.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EW-M5610FT</th><td>YAD-BK, HAR-C, HAR-M, HAR-Y</td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-m5610ft.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">EW-M634T</th><td>YAD-BK, HAR-C, HAR-M, HAR-Y</td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-m634t.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">PX-048A</th><td>RDH-BK/C/M/Y, RDH-BK-L, RDH-4CL</td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-048a.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">PX-049A</th><td>RDH-BK/C/M/Y, RDH-BK-L, RDH-4CL</td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-048a.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">PX-M884F</th><td>IP01KB/CB/MB/YB (L), IP01KA/CA/MA/YA (M), PXMB8</td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">PX-S884</th><td>IP01KB/CB/MB/YB (L), IP01KA/CA/MA/YA (M), PXMB8</td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td></tr>
+      </tbody></table></div></section>
+<section><h2>エプソンの純正インク（78件）</h2><div class="wrap bleed"><table class="old"><thead><tr><th scope="col">型番</th><th scope="col">シリーズ</th><th scope="col">色</th><th scope="col">容量</th><th scope="col">単位</th><th scope="col">価格</th><th scope="col">出典</th><th scope="col">買う</th></tr></thead><tbody>
+        <tr><th scope="row">ICBK80</th><td>IC80<br><small>未確認</small></td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ICBK80/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ICBK80L</th><td>IC80<br><small>未確認</small></td><td>BK</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icbk80l.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ICBK80L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ICC80L</th><td>IC80<br><small>未確認</small></td><td>C</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icc80l.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ICC80L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ICLC80L</th><td>IC80<br><small>未確認</small></td><td>LC</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/iclc80l.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ICLC80L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ICLM80L</th><td>IC80<br><small>未確認</small></td><td>LM</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/iclm80l.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ICLM80L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ICM80L</th><td>IC80<br><small>未確認</small></td><td>M</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icm80l.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ICM80L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ICY80L</th><td>IC80<br><small>未確認</small></td><td>Y</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/icy80l.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ICY80L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">IP01CA</th><td>IP01</td><td>C</td><td>Mサイズ</td><td>インクパック</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/IP01CA/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">IP01CB</th><td>IP01</td><td>C</td><td>Lサイズ</td><td>インクパック</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/IP01CB/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">IP01KA</th><td>IP01</td><td>BK</td><td>Mサイズ</td><td>インクパック</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/IP01KA/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">IP01KB</th><td>IP01</td><td>BK</td><td>Lサイズ</td><td>インクパック</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/IP01KB/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">IP01MA</th><td>IP01</td><td>M</td><td>Mサイズ</td><td>インクパック</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/IP01MA/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">IP01MB</th><td>IP01</td><td>M</td><td>Lサイズ</td><td>インクパック</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/IP01MB/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">IP01YA</th><td>IP01</td><td>Y</td><td>Mサイズ</td><td>インクパック</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/IP01YA/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">IP01YB</th><td>IP01</td><td>Y</td><td>Lサイズ</td><td>インクパック</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-m884f.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/IP01YB/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ITH-6CL</th><td>ITH<br><small>イチョウ</small></td><td>6色</td><td>未確認</td><td>6色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-6cl.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ITH-6CL/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ITH-BK</th><td>ITH<br><small>イチョウ</small></td><td>BK</td><td>未確認</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-bk.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ITH-BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ITH-C</th><td>ITH<br><small>イチョウ</small></td><td>C</td><td>未確認</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-c.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ITH-C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ITH-LC</th><td>ITH<br><small>イチョウ</small></td><td>LC</td><td>未確認</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-lc.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ITH-LC/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ITH-M</th><td>ITH<br><small>イチョウ</small></td><td>M</td><td>未確認</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-m.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ITH-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">ITH-Y</th><td>ITH<br><small>イチョウ</small></td><td>Y</td><td>未確認</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/ith-y.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/ITH-Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-6CL</th><td>KAM<br><small>カメ</small></td><td>6色</td><td>標準</td><td>6色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-6CL/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-6CL-L</th><td>KAM<br><small>カメ</small></td><td>6色</td><td>増量</td><td>6色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-l.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-6CL-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-6CL-M</th><td>KAM<br><small>カメ</small></td><td>6色</td><td>黒のみ増量</td><td>6色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-6cl-m.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-6CL-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-BK</th><td>KAM<br><small>カメ</small></td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-BK-L</th><td>KAM<br><small>カメ</small></td><td>BK</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-BK-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-C</th><td>KAM<br><small>カメ</small></td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-C-L</th><td>KAM<br><small>カメ</small></td><td>C</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-C-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-LC</th><td>KAM<br><small>カメ</small></td><td>LC</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-LC/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-LC-L</th><td>KAM<br><small>カメ</small></td><td>LC</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-LC-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-LM</th><td>KAM<br><small>カメ</small></td><td>LM</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kam-lm.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-LM/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-LM-L</th><td>KAM<br><small>カメ</small></td><td>LM</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-LM-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-M</th><td>KAM<br><small>カメ</small></td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-M-L</th><td>KAM<br><small>カメ</small></td><td>M</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-M-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-Y</th><td>KAM<br><small>カメ</small></td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KAM-Y-L</th><td>KAM<br><small>カメ</small></td><td>Y</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-882aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KAM-Y-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-6CL</th><td>KUI<br><small>クマノミ</small></td><td>6色</td><td>標準</td><td>6色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/kui-6cl.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-6CL/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-6CL-L</th><td>KUI<br><small>クマノミ</small></td><td>6色</td><td>増量</td><td>6色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-6CL-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-6CL-M</th><td>KUI<br><small>クマノミ</small></td><td>6色</td><td>黒のみ増量</td><td>6色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-6CL-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-BK</th><td>KUI<br><small>クマノミ</small></td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-BK-L</th><td>KUI<br><small>クマノミ</small></td><td>BK</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-BK-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-C</th><td>KUI<br><small>クマノミ</small></td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-C-L</th><td>KUI<br><small>クマノミ</small></td><td>C</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-C-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-LC</th><td>KUI<br><small>クマノミ</small></td><td>LC</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-LC/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-LC-L</th><td>KUI<br><small>クマノミ</small></td><td>LC</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-LC-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-LM</th><td>KUI<br><small>クマノミ</small></td><td>LM</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-LM/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-LM-L</th><td>KUI<br><small>クマノミ</small></td><td>LM</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-LM-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-M</th><td>KUI<br><small>クマノミ</small></td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-M-L</th><td>KUI<br><small>クマノミ</small></td><td>M</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-M-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-Y</th><td>KUI<br><small>クマノミ</small></td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">KUI-Y-L</th><td>KUI<br><small>クマノミ</small></td><td>Y</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-880aw.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/KUI-Y-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MED-4CL</th><td>MED<br><small>メダマヤキ</small></td><td>4色</td><td>標準</td><td>4色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-056a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MED-4CL/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MED-BK</th><td>MED<br><small>メダマヤキ</small></td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-056a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MED-BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MED-C</th><td>MED<br><small>メダマヤキ</small></td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-056a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MED-C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MED-M</th><td>MED<br><small>メダマヤキ</small></td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-056a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MED-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MED-Y</th><td>MED<br><small>メダマヤキ</small></td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-056a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MED-Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MUG-4CL</th><td>MUG<br><small>マグカップ</small></td><td>4色</td><td>標準</td><td>4色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-452a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MUG-4CL/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MUG-BK</th><td>MUG<br><small>マグカップ</small></td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-452a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MUG-BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MUG-C</th><td>MUG<br><small>マグカップ</small></td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-452a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MUG-C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MUG-M</th><td>MUG<br><small>マグカップ</small></td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-452a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MUG-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">MUG-Y</th><td>MUG<br><small>マグカップ</small></td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-452a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/MUG-Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">RDH-4CL</th><td>RDH<br><small>リコーダー</small></td><td>4色</td><td>標準</td><td>4色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/rdh-4cl.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/RDH-4CL/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">RDH-BK</th><td>RDH<br><small>リコーダー</small></td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-048a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/RDH-BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">RDH-BK-L</th><td>RDH<br><small>リコーダー</small></td><td>BK</td><td>増量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/rdh-bk-l.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/RDH-BK-L/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">RDH-C</th><td>RDH<br><small>リコーダー</small></td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-048a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/RDH-C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">RDH-M</th><td>RDH<br><small>リコーダー</small></td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-048a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/RDH-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">RDH-Y</th><td>RDH<br><small>リコーダー</small></td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/px-048a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/RDH-Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">SAT-6CL</th><td>SAT<br><small>サツマイモ</small></td><td>6色</td><td>標準</td><td>6色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/products/supply/shoumouhin/data/shoumouhin/sat-6cl.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/SAT-6CL/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">SAT-BK</th><td>SAT<br><small>サツマイモ</small></td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-812a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/SAT-BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">SAT-C</th><td>SAT<br><small>サツマイモ</small></td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-812a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/SAT-C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">SAT-LC</th><td>SAT<br><small>サツマイモ</small></td><td>LC</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-812a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/SAT-LC/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">SAT-LM</th><td>SAT<br><small>サツマイモ</small></td><td>LM</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-812a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/SAT-LM/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">SAT-M</th><td>SAT<br><small>サツマイモ</small></td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-812a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/SAT-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">SAT-Y</th><td>SAT<br><small>サツマイモ</small></td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ep-812a.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/SAT-Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">HAR-C</th><td>YAD/HAR<br><small>ハリネズミ</small></td><td>C</td><td>ボトル70ml</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-m634t.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/HAR-C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">HAR-M</th><td>YAD/HAR<br><small>ハリネズミ</small></td><td>M</td><td>ボトル70ml</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-m634t.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/HAR-M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">HAR-Y</th><td>YAD/HAR<br><small>ハリネズミ</small></td><td>Y</td><td>ボトル70ml</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-m634t.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/HAR-Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">YAD-BK</th><td>YAD/HAR<br><small>ヤドカリ</small></td><td>BK</td><td>ボトル127ml</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.epson.jp/support/portal/shoumouhin/ew-m634t.htm" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/YAD-BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+      </tbody></table></div></section>
+<section><h2>ほかのページ</h2><div class="toc"><ul><li><a href="/printer-ink/">型番から引く（トップ）</a></li><li><a href="/printer-ink/canon.html">キヤノン</a></li><li><a href="/printer-ink/brother.html">ブラザー</a></li><li><a href="/printer-ink/zouryou.html">標準↔増量の対応表</a></li><li><a href="/printer-ink/traps.html">間違えやすいところ</a></li></ul></div></section>
+<footer>
+  <p>このページの型番・適合・価格・注意文は、すべてメーカーの公式サイト・公式ストア・公式の取扱説明書／カタログの記載に基づいています。各項目の出典リンクから原文を確認できます。<b>公式に書かれていないことは書いていません。</b>確認できなかったものは「未確認」と書いています。</p>
+  <p>型番・価格・取り扱いは変わることがあります。買う前に、お使いの機種の取扱説明書とメーカー公式ページで最終確認してください。このサイトはメーカーとは関係のない個人の調べ物です。</p>
+  <p><a href="/printer-ink/">トップに戻る</a></p>
+</footer>
+</div>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c30670a5b24743c69ba156eeb805ce50"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

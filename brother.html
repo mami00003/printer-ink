@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ブラザーのプリンターインク — 1文字違いで別物</title>
+<meta name="description" content="LC411 と LC416、LC3117 と LC3119、LC3111 と LC3117/3119。番号が近いのに互換がない組み合わせを整理しました。本体132機種ぶんの逆引きつき。">
+<link rel="canonical" href="https://mami00003.github.io/printer-ink/brother.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ブラザーのプリンターインク — 1文字違いで別物">
+<meta property="og:description" content="LC411 と LC416、LC3117 と LC3119、LC3111 と LC3117/3119。番号が近いのに互換がない組み合わせを整理しました。本体132機種ぶんの逆引きつき。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@500;700&display=swap">
+<style>
+
+:root{
+  --ground:#f4f6f8; --surface:#ffffff; --raise:#eceff3; --sunk:#e3e8ed;
+  --ink:#141a21; --ink2:#4a5866; --ink3:#7d8b99;
+  --line:#dbe2e9; --line2:#c3ced9;
+  --accent:#a8650a; --accent-soft:#fbf0dd;
+  --ok:#1a7a53; --ok-soft:#e0f2ea;
+  --warn:#a8650a; --warn-soft:#fbf0dd;
+  --bad:#ad3729; --bad-soft:#fbe6e2;
+  --mono:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Noto Sans JP","Hiragino Sans","Yu Gothic UI",Meiryo,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0e1216; --surface:#161c22; --raise:#1e262d; --sunk:#0a0e11;
+    --ink:#e7eef4; --ink2:#a0b0bd; --ink3:#6d7d8a;
+    --line:#26303a; --line2:#35424e;
+    --accent:#f0a63c; --accent-soft:#2a2013;
+    --ok:#4cc08a; --ok-soft:#10291f;
+    --warn:#f0a63c; --warn-soft:#2a2013;
+    --bad:#f07a68; --bad-soft:#2e1714;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0e1216; --surface:#161c22; --raise:#1e262d; --sunk:#0a0e11;
+  --ink:#e7eef4; --ink2:#a0b0bd; --ink3:#6d7d8a;
+  --line:#26303a; --line2:#35424e;
+  --accent:#f0a63c; --accent-soft:#2a2013;
+  --ok:#4cc08a; --ok-soft:#10291f;
+  --warn:#f0a63c; --warn-soft:#2a2013;
+  --bad:#f07a68; --bad-soft:#2e1714;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:820px; margin:0 auto; padding-inline:18px; padding-block:0 56px}
+h1,h2,h3{margin:0; text-wrap:balance}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+a{color:var(--accent)}
+
+.label{
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ink3);
+}
+
+/* 広告表記 */
+.ad-note{background:var(--raise); border-bottom:1px solid var(--line); font-size:12.5px; color:var(--ink2)}
+.ad-note div{max-width:820px; margin:0 auto; padding:9px 18px}
+
+/* header */
+header{padding-block:38px 26px}
+h1{font-size:clamp(25px,5.2vw,34px); font-weight:700; letter-spacing:-.01em; line-height:1.35}
+header p{margin:12px 0 0; color:var(--ink2); max-width:56ch; font-size:14.5px}
+
+/* 入力 */
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  padding:22px; display:grid; gap:22px; grid-template-columns:1fr 1fr;
+}
+.field{display:flex; flex-direction:column; gap:8px; min-width:0}
+.field.wide{grid-column:1 / -1}
+.seg{display:flex; flex-wrap:wrap; gap:6px}
+.seg button{
+  font:inherit; font-size:13.5px; font-weight:500; cursor:pointer;
+  padding:6px 13px; border-radius:6px; background:var(--raise);
+  color:var(--ink2); border:1px solid transparent; transition:.14s;
+}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--surface); border-color:var(--ink)}
+.spd{display:flex; align-items:baseline; gap:9px}
+.spd output{font-family:var(--mono); font-weight:700; font-size:21px; font-variant-numeric:tabular-nums}
+.spd span{font-size:12.5px; color:var(--ink3)}
+input[type=range]{width:100%; accent-color:var(--accent); margin:0}
+
+/* メーター（ヒーロー） */
+.meter{
+  margin-top:18px; background:var(--surface); border:1px solid var(--line);
+  border-radius:10px; overflow:hidden;
+}
+.meter-head{
+  padding:20px 22px 16px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  border-bottom:1px solid var(--line);
+}
+.big{
+  font-family:var(--mono); font-weight:700; font-size:clamp(34px,7vw,46px);
+  line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums; color:var(--accent);
+}
+.big small{font-size:.38em; letter-spacing:.04em; margin-left:5px; color:var(--ink2)}
+.verdict{
+  font-size:13px; font-weight:700; padding:4px 11px; border-radius:999px; white-space:nowrap;
+}
+.v-ok{background:var(--ok-soft); color:var(--ok)}
+.v-warn{background:var(--warn-soft); color:var(--warn)}
+.v-bad{background:var(--bad-soft); color:var(--bad)}
+.meter-body{padding:20px 22px 22px; display:flex; flex-direction:column; gap:14px}
+.bar{
+  position:relative; height:26px; border-radius:5px; background:var(--sunk);
+  border:1px solid var(--line); overflow:hidden;
+}
+.bar .fill{position:absolute; inset:0 auto 0 0; border-radius:4px 0 0 4px; transition:width .25s ease, background .25s}
+.bar .safe{
+  position:absolute; top:-1px; bottom:-1px; width:2px; background:var(--ink2);
+}
+.scale{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--ink3); font-variant-numeric:tabular-nums}
+.meter-body p{margin:0; font-size:14px; color:var(--ink2)}
+.meter-body p b{color:var(--ink)}
+
+/* 設定表 */
+section{margin-top:44px}
+h2{font-size:19px; font-weight:700; letter-spacing:-.005em}
+.lede{color:var(--ink2); margin:8px 0 0; font-size:14px; max-width:60ch}
+.tabs{display:flex; flex-direction:column; gap:20px; margin-top:20px}
+.tab{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.tab-h{
+  padding:11px 18px; background:var(--raise); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.tab-h .label{color:var(--ink2)}
+.rows{display:flex; flex-direction:column}
+.row{
+  display:grid; grid-template-columns:max-content minmax(0,1fr); gap:10px 18px;
+  align-items:baseline; padding:11px 18px; border-top:1px solid var(--line);
+}
+.rows .row:first-child{border-top:0}
+.row dt{font-size:14px; color:var(--ink2); margin:0}
+.row dd{
+  margin:0; font-family:var(--mono); font-weight:700; font-size:14.5px;
+  color:var(--ink); font-variant-numeric:tabular-nums; text-align:right; word-break:break-word;
+}
+.row .note{display:block; font-family:var(--sans); font-weight:400; font-size:12px; color:var(--ink3); margin-top:2px}
+
+/* 原因リスト */
+.causes{display:flex; flex-direction:column; gap:0; margin-top:16px}
+.cause{display:grid; grid-template-columns:minmax(0,148px) 1fr; gap:6px 20px; padding:15px 0; border-top:1px solid var(--line)}
+.cause dt{font-family:var(--mono); font-size:12.5px; font-weight:700; color:var(--accent); letter-spacing:.02em; padding-top:3px}
+.cause dd{margin:0; font-size:14px; color:var(--ink2)}
+.cause dd b{color:var(--ink)}
+
+/* 広告カード */
+.tools{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-top:20px}
+.tool{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:17px 18px; display:flex; flex-direction:column; gap:10px}
+.tool h3{font-size:16px; font-weight:700}
+.tool p{margin:0; font-size:13.5px; color:var(--ink2); flex:1}
+.tool a, .tool span.cta{
+  display:block; text-align:center; text-decoration:none; font-size:14px; font-weight:700;
+  padding:9px 14px; border-radius:7px; background:var(--ink); color:var(--surface);
+}
+.tool span.cta{background:var(--raise); color:var(--ink3); border:1px dashed var(--line2); font-weight:500}
+.todo{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; color:var(--warn); border:1px solid var(--warn); border-radius:4px; padding:1px 7px; align-self:flex-start}
+
+footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink3); line-height:1.75}
+footer a{color:var(--ink2)}
+
+@media (max-width:560px){
+  .panel{grid-template-columns:1fr; gap:18px; padding:18px}
+  .cause{grid-template-columns:1fr; gap:2px}
+  .row{grid-template-columns:1fr; gap:2px}
+  .row dd{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.count{margin-top:18px; font-family:var(--mono); font-size:12px; letter-spacing:.08em; color:var(--ink3)}
+.res{display:flex; flex-direction:column; gap:12px; margin-top:12px}
+.pack{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px; display:flex; flex-direction:column; gap:8px}
+.pack .no{font-family:var(--mono); font-weight:700; font-size:20px; letter-spacing:.01em; color:var(--accent)}
+.pack .nm{font-size:15px; font-weight:700; line-height:1.5}
+.pack p{margin:0; font-size:14px; color:var(--ink2)}
+.pack p b{color:var(--ink)}
+.buys{display:flex; flex-wrap:wrap; gap:8px}
+.pack a.buy{
+  display:inline-block; text-decoration:none;
+  font-size:13.5px; font-weight:700; padding:8px 14px; border-radius:7px;
+  background:var(--ink); color:var(--surface);
+}
+.pack a.buy.az{background:transparent; color:var(--ink); border:1px solid var(--ink)}
+.pack .adlabel{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; color:var(--ink3)}
+.pack .nofound{font-size:13px; color:var(--ink2); background:var(--raise); border:1px dashed var(--line2); border-radius:7px; padding:10px 12px; margin:0}
+.src{font-size:12px; color:var(--ink3)}
+.src a{color:var(--ink2)}
+.empty{background:var(--surface); border:1px dashed var(--line2); border-radius:10px; padding:20px; color:var(--ink2); font-size:14px}
+.warnbox{background:var(--bad-soft); border:1px solid var(--bad); border-radius:10px; padding:16px 18px; margin-top:18px}
+.warnbox p{margin:0; font-size:14px; color:var(--ink)}
+.warnbox .label{color:var(--bad)}
+input[type=text]{
+  font:inherit; font-size:15px; width:100%; padding:9px 12px; border-radius:7px;
+  border:1px solid var(--line2); background:var(--surface); color:var(--ink);
+}
+.quotes{display:flex; flex-direction:column; gap:14px; margin-top:18px}
+.quote{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--ink2); border-radius:0 10px 10px 0; padding:14px 18px}
+.quote .who{font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:6px}
+.quote blockquote{margin:0; font-size:14px; color:var(--ink2); line-height:1.8}
+.old{width:100%; border-collapse:collapse; margin-top:16px; font-size:14px}
+.old th,.old td{border-bottom:1px solid var(--line); padding:9px 10px; text-align:left; vertical-align:top}
+.old th{font-size:12px; letter-spacing:.06em; color:var(--ink3); font-weight:500; white-space:nowrap}
+.old td:first-child{font-family:var(--mono); color:var(--ink2); word-break:break-word}
+.old td:last-child{font-family:var(--mono); font-weight:700; color:var(--accent); white-space:nowrap}
+.wrap{overflow-x:auto}
+.old th[scope=row]{font-family:var(--mono); font-weight:700; color:var(--accent); white-space:nowrap; font-size:13px; letter-spacing:0}
+.old.list td:first-child,.old.list td:last-child{font-family:inherit; color:inherit; font-weight:400; white-space:normal}
+.old .buycell{white-space:nowrap}
+.old .buycell a{color:var(--ink); font-weight:700}
+.old .na{color:var(--ink3)}
+.old small{color:var(--ink3); font-size:12px}
+.makerblocks{display:flex; flex-direction:column; gap:16px; margin-top:16px}
+.makerblock{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px}
+.makerblock h3{font-size:15px; font-weight:700; margin:0 0 6px}
+.makerblock p.how{margin:0 0 8px; font-size:14px; color:var(--ink2)}
+.makerblock ul{margin:0; padding-left:18px; font-size:14px; color:var(--ink2); line-height:1.9}
+.makerblock code{font-family:var(--mono); font-weight:700; color:var(--accent)}
+.makerblock small{color:var(--ink3); font-size:12.5px}
+.stamp{font-family:var(--mono); font-size:11px; letter-spacing:.08em; color:var(--ink3)}
+
+:root{--accent:#7a2f6e; --accent-soft:#f5e7f2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--accent:#dd8ccd; --accent-soft:#271026}}
+:root[data-theme="dark"]{--accent:#dd8ccd; --accent-soft:#271026}
+.srch{margin-top:16px}
+.srch label{display:block; font-size:13px; color:var(--ink2); margin-bottom:6px}
+.hit{font-family:var(--mono); font-size:12px; color:var(--ink3); margin-top:8px; letter-spacing:.06em}
+.old tr[hidden]{display:none}
+mark{background:var(--accent-soft); color:var(--ink); border-radius:2px; padding:0 1px}
+.cmp{width:100%; border-collapse:collapse; margin-top:16px; font-size:13.5px}
+.cmp th,.cmp td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top}
+.cmp thead th{background:var(--raise); font-size:12px; color:var(--ink2); font-weight:700; white-space:nowrap}
+.cmp td b{color:var(--ink)}
+.oem{display:flex; flex-direction:column; gap:12px; margin-top:16px}
+.oemcard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:15px 18px}
+.oemcard h3{font-size:14.5px; font-weight:700; margin:0 0 6px; font-family:var(--mono); color:var(--accent)}
+.oemcard p{margin:0; font-size:14px; color:var(--ink2)}
+.oemcard p + p{margin-top:7px}
+.flow{font-family:var(--mono); font-size:13px; color:var(--ink); background:var(--raise); border-radius:6px; padding:8px 11px; margin-top:8px; overflow-x:auto; white-space:nowrap}
+.pill{display:inline-block; font-family:var(--mono); font-size:11px; letter-spacing:.06em; padding:2px 8px; border-radius:999px; background:var(--raise); color:var(--ink2); border:1px solid var(--line)}
+.toc{margin-top:22px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 18px}
+.toc ol{margin:0; padding-left:20px; font-size:14px; line-height:1.95; color:var(--ink2)}
+.toc a{color:var(--ink2)}
+.wrap.bleed{margin-inline:0}
+@media (min-width:1120px){.wrap.bleed{margin-inline:-130px}}
+.old td.nw, .old th.nw{white-space:nowrap}
+.keyfacts{margin-top:20px; display:flex; flex-direction:column; gap:0}
+.keyfacts > div{display:grid; grid-template-columns:26px minmax(0,1fr); gap:10px; padding:12px 0; border-top:1px solid var(--line); font-size:14.5px; color:var(--ink2); align-items:start}
+.keyfacts > div:first-child{border-top:0}
+.keyfacts > div > span{font-family:var(--mono); font-weight:700; color:var(--accent); line-height:1.8}
+.keyfacts > div > p{margin:0; min-width:0}
+.keyfacts b{color:var(--ink)}
+
+.toc{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+.toc ul{margin:0;padding-left:20px;line-height:1.95;font-size:14px;color:var(--ink2)}
+.toc a{color:var(--ink2)}
+.crumb{font-size:13px;color:var(--ink3);margin:0 0 6px}
+.crumb a{color:var(--ink2)}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:16px}
+.block ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink2);line-height:1.95}
+.block code{font-family:var(--mono);font-weight:700;color:var(--accent)}
+.block small{color:var(--ink3);font-size:12.5px}
+.block p{margin:0 0 8px;font-size:14.5px;color:var(--ink2)}
+.block p:last-child{margin-bottom:0}
+.block b{color:var(--ink)}
+
+</style>
+</head>
+<body>
+<div class="ad-note"><div>このページには広告（アフィリエイトリンク）が含まれます。型番・適合・価格・注意文はすべてメーカー公式の記載から取っています。</div></div>
+<div class="page">
+<header>
+  <p class="crumb"><a href="/printer-ink/">プリンターインク型番逆引き</a> ／ ブラザー</p>
+  <h1>ブラザーのプリンターインク — 1文字違いで別物</h1>
+  <p>LC411 と LC416、LC3117 と LC3119、LC3111 と LC3117/3119。番号が近いのに互換がない組み合わせを整理しました。本体132機種ぶんの逆引きつき。</p>
+</header>
+
+<section><h2>1文字違いで別物になる組み合わせ</h2>
+<div class="oem"><div class="oemcard"><h3>ブラザー ― 1文字違いで別物</h3><p><b>LC411</b> と <b>LC416</b> は1文字違いですが別物です。DCP-J915N / J926N は LC411、DCP-J4143N / MFC-J4540N は LC416。LC411 に大容量(XL)はなく、LC416 には XL があります。</p><p><b>LC3117</b> と <b>LC3119</b> は、同じ機種（MFC-J6980CDW など）の標準と大容量です。番号が変わるのに同じ機種用です。</p><p><b>LC3111</b> は A4機（DCP-J973N など）、<b>LC3117 / LC3119</b> は A3機（MFC-J6980CDW など）。見た目は近いですが互換はありません。</p><p class="src"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">DCP-J915N 消耗品</a>　<a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">MFC-J4540N 消耗品</a>　<a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">MFC-J6980CDW 消耗品</a></p></div></div>
+</section>
+<section><h2>色別の型番が確定しているのは5シリーズだけ</h2>
+<p class="lede">公式の一覧から約134機種ぶんのシリーズは取れましたが、<b>色別の型番まで確認できたのは LC411 / LC416 / LC3111 / LC3117 / LC3119 の5シリーズ</b>です。残りはシリーズ名までしか載せていません。</p>
+<div class="wrap bleed"><table class="old"><thead><tr><th scope="col">本体の型番</th><th scope="col">使えるインク</th><th scope="col">出典</th></tr></thead><tbody>
+        <tr><th scope="row">DCP-J1800N</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J4140N</th><td>LC416BK/C/M/Y, LC416XLBK/XLC/XLM/XLY</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J4143N</th><td>LC416BK/C/M/Y, LC416XLBK/XLC/XLM/XLY</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J526N</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J528N</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J572N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J577N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J582N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J587N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J914N</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J915N</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J926N-W/B</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J928N-W/B</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J972N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J973N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J978N-B/W</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J981N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J982N-B/W</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J987N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4440N</th><td>LC416BK/C/M/Y, LC416XLBK/XLC/XLM/XLY</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4443N</th><td>LC416BK/C/M/Y, LC416XLBK/XLC/XLM/XLY</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4540N</th><td>LC416BK/C/M/Y, LC416XLBK/XLC/XLM/XLY</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4543N</th><td>LC416BK/C/M/Y, LC416XLBK/XLC/XLM/XLY</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4940DN</th><td>LC416BK/C/M/Y, LC416XLBK/XLC/XLM/XLY</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J5630CDW</th><td>LC3117BK/C/M/Y, LC3117-4PK, LC3119BK/C/M/Y, LC3119-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6580CDW</th><td>LC3117BK/C/M/Y, LC3117-4PK, LC3119BK/C/M/Y, LC3119-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6583CDW</th><td>LC3117BK/C/M/Y, LC3117-4PK, LC3119BK/C/M/Y, LC3119-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6980CDW</th><td>LC3117BK/C/M/Y, LC3117-4PK, LC3119BK/C/M/Y, LC3119-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6983CDW</th><td>LC3117BK/C/M/Y, LC3117-4PK, LC3119BK/C/M/Y, LC3119-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J738DN/DWN</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J739DN/DWN</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J893N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J898N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J903N</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J904N</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J905N</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J939DN/DWN</th><td>LC411BK/C/M/Y, LC411BK-2PK, LC411-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J998DN/DWN</th><td>LC3111BK/C/M/Y, LC3111BK-2PK, LC3111-4PK</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td></tr>
+      </tbody></table></div>
+</section>
+<section><h2>シリーズまでしか分かっていない機種（94機種）</h2>
+<p class="lede">シリーズは確定しています。色別の型番は、お使いの機種の公式ページ（<code>brother.co.jp/product/printer/inkjet/&lt;機種名小文字&gt;/accessory/index.aspx</code>）で確認してください。</p>
+<div class="wrap bleed"><table class="old"><thead><tr><th scope="col">本体の型番</th><th scope="col">使えるインク</th><th scope="col">出典</th></tr></thead><tbody>
+        <tr><th scope="row">DCP-J1200N</th><td>LC414 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J1203N</th><td>LC414 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J1270N</th><td>LC514 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J132N</th><td>LC110 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J137N</th><td>LC110 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J152N</th><td>LC110 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J4210N</th><td>LC117 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J4215N</th><td>LC117 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J4220N</th><td>LC217 / LC215 / LC213 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J4225N</th><td>LC217 / LC215 / LC213 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J4250N</th><td>LC516 / LC516XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J529N</th><td>LC511 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J552N</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J557N</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J562N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J567N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J7205CDW</th><td>LC512 / LC512XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J752N</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J757N</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J762N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J767N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J916N</th><td>LC511 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J929N-W/B</th><td>LC511 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J952N</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J957N</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J962N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J963N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J968N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J983N</th><td>LC21E シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">DCP-J988N</th><td>LC3133 / LC3135 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">HL-J5113N</th><td>LC516 / LC516XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">HL-J6000CDW</th><td>LC3139 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">HL-J7010CDW</th><td>LC417XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J1500N</th><td>LC3133 / LC3135 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J1605DN</th><td>LC3133 / LC3135 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4450N</th><td>LC516 / LC516XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4510N</th><td>LC117 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4720N</th><td>LC217 / LC215 / LC213 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4725N</th><td>LC217 / LC215 / LC213 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4810DN</th><td>LC117 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4910CDW</th><td>LC117 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J4950DN</th><td>LC516 / LC516XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J5010N</th><td>LC516 / LC516XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J5115N</th><td>LC516 / LC516XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J5620CDW</th><td>LC219 / LC215 / LC213 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J5720CDW</th><td>LC219 / LC215 / LC213 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J5800CDW</th><td>LC417XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J5820DN</th><td>LC219 / LC215 / LC213 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J5910CDW</th><td>LC17 / LC12 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6510DW</th><td>LC17 / LC12 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6570CDW</th><td>LC119 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6573CDW</th><td>LC119 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6710CDW</th><td>LC17 / LC12 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6770CDW</th><td>LC119 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6910CDW</th><td>LC17 / LC12 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6970CDW</th><td>LC119 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6973CDW</th><td>LC119 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6975CDW</th><td>LC119 / LC115 / LC113 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6990CDW</th><td>LC15E シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6995CDW</th><td>LC3129 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6997CDW</th><td>LC3139 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J6999CDW</th><td>LC3139 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7100CDW</th><td>LC412 / LC412XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7110CDW</th><td>LC512 / LC512XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J720D/DW</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7210CDW</th><td>LC512 / LC512XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J727D/DW</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7300CDW</th><td>LC412 / LC412XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J730DN/DWN</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7310CDW</th><td>LC512 / LC512XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J742DN/DWN</th><td>LC511 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7500CDW</th><td>LC417XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7510CDW</th><td>LC517XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7600CDW</th><td>LC417XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7610CDW</th><td>LC517XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J7700CDW</th><td>LC417XL シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J820DN/DWN</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J827DN/DWN</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J830DN/DWN</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J837DN/DWN</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J870N</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J877N</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J880N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J887N</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J890DN/DWN</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J897DN/DWN</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J900DN/DWN</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J907DN/DWN</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J908N</th><td>LC511 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J943DN/DWN</th><td>LC511 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J980DN/DWN</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J987DN/DWN</th><td>LC111 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J990DN/DWN</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+        <tr><th scope="row">MFC-J997DN/DWN</th><td>LC211 シリーズ（色別の型番は公式で未確認）</td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/supply/" target="_blank" rel="noopener">公式</a></td></tr>
+      </tbody></table></div>
+</section>
+<section><h2>ブラザーの純正インク（30件）</h2>
+<p class="lede">価格は公式がオープン価格としているため出ません。</p>
+<div class="wrap bleed"><table class="old"><thead><tr><th scope="col">型番</th><th scope="col">シリーズ</th><th scope="col">色</th><th scope="col">容量</th><th scope="col">単位</th><th scope="col">価格</th><th scope="col">出典</th><th scope="col">買う</th></tr></thead><tbody>
+        <tr><th scope="row">LC3111-4PK</th><td>LC3111</td><td>BK/C/M/Y</td><td>標準</td><td>4色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3111-4PK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3111BK</th><td>LC3111</td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3111BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3111BK-2PK</th><td>LC3111</td><td>BK</td><td>標準</td><td>2本</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3111BK-2PK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3111C</th><td>LC3111</td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3111C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3111M</th><td>LC3111</td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3111M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3111Y</th><td>LC3111</td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj973n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3111Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3117-4PK</th><td>LC3117/3119</td><td>BK/C/M/Y</td><td>標準</td><td>4色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3117-4PK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3117BK</th><td>LC3117/3119</td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3117BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3117C</th><td>LC3117/3119</td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3117C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3117M</th><td>LC3117/3119</td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3117M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3117Y</th><td>LC3117/3119</td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3117Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3119-4PK</th><td>LC3117/3119</td><td>BK/C/M/Y</td><td>大容量</td><td>4色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3119-4PK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3119BK</th><td>LC3117/3119</td><td>BK</td><td>大容量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3119BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3119C</th><td>LC3117/3119</td><td>C</td><td>大容量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3119C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3119M</th><td>LC3117/3119</td><td>M</td><td>大容量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3119M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC3119Y</th><td>LC3117/3119</td><td>Y</td><td>大容量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj6980cdw/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC3119Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC411-4PK</th><td>LC411</td><td>BK/C/M/Y</td><td>標準</td><td>4色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC411-4PK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC411BK</th><td>LC411</td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC411BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC411BK-2PK</th><td>LC411</td><td>BK</td><td>標準</td><td>2本</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC411BK-2PK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC411C</th><td>LC411</td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC411C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC411M</th><td>LC411</td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC411M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC411Y</th><td>LC411</td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/dcpj915n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC411Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC416BK</th><td>LC416</td><td>BK</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC416BK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC416C</th><td>LC416</td><td>C</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC416C/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC416M</th><td>LC416</td><td>M</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC416M/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC416XLBK</th><td>LC416</td><td>BK</td><td>大容量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC416XLBK/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC416XLC</th><td>LC416</td><td>C</td><td>大容量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC416XLC/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC416XLM</th><td>LC416</td><td>M</td><td>大容量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC416XLM/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC416XLY</th><td>LC416</td><td>Y</td><td>大容量</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC416XLY/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+        <tr><th scope="row">LC416Y</th><td>LC416</td><td>Y</td><td>標準</td><td>単色</td><td><span class="na">オープン価格</span></td><td class="nw"><a href="https://www.brother.co.jp/product/printer/inkjet/mfcj4540n/accessory/index.aspx" target="_blank" rel="noopener">公式</a></td><td class="buycell"><a href="https://search.rakuten.co.jp/search/mall/LC416Y/" rel="sponsored nofollow noopener" target="_blank">楽天で探す</a></td></tr>
+      </tbody></table></div></section>
+<section><h2>純正以外について、ブラザーが書いていること</h2>
+<div class="block"><p>「ブラザー純正品以外の消耗品（トナーカートリッジ・インクカートリッジ等。詰替え商品含む。）を使用したことによる故障は、保証期間内や保守契約期間中でも有償修理となります」</p>
+<p><b>保証の話であって、使えない・壊れるとは書かれていません。</b></p>
+<p class="src" style="margin-top:8px"><a href="https://www.brother.co.jp/product/original/ink/index.aspx" target="_blank" rel="noopener">出典：ブラザー</a></p></div>
+</section>
+<section><h2>ほかのページ</h2><div class="toc"><ul><li><a href="/printer-ink/">型番から引く（トップ）</a></li><li><a href="/printer-ink/canon.html">キヤノン</a></li><li><a href="/printer-ink/epson.html">エプソン</a></li><li><a href="/printer-ink/zouryou.html">標準↔増量の対応表</a></li><li><a href="/printer-ink/traps.html">間違えやすいところ</a></li></ul></div></section>
+<footer>
+  <p>このページの型番・適合・価格・注意文は、すべてメーカーの公式サイト・公式ストア・公式の取扱説明書／カタログの記載に基づいています。各項目の出典リンクから原文を確認できます。<b>公式に書かれていないことは書いていません。</b>確認できなかったものは「未確認」と書いています。</p>
+  <p>型番・価格・取り扱いは変わることがあります。買う前に、お使いの機種の取扱説明書とメーカー公式ページで最終確認してください。このサイトはメーカーとは関係のない個人の調べ物です。</p>
+  <p><a href="/printer-ink/">トップに戻る</a></p>
+</footer>
+</div>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c30670a5b24743c69ba156eeb805ce50"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
